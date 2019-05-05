@@ -1,0 +1,8 @@
+
+broker: 
+  wsPort: 6032
+  containerImage: embeddedenterprises/autobahnkreuz:v0.9.8
+
+certificateIssuer: git-workshop-issuer
+
+externalDomain: workshop.pattig.rocks
