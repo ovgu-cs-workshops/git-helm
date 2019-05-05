@@ -28,6 +28,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: {{ $Release.Name }}-cmanager
+  namespace: {{ $Release.Namespace }}
 roleRef:
   kind: Role
   name: {{ $Release.Name }}-cmanager
