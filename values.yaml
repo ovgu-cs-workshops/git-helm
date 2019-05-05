@@ -3,6 +3,9 @@ broker:
   wsPort: 6032
   containerImage: embeddedenterprises/autobahnkreuz:v0.9.8
 
+cmanager:
+  containerImage: docker.pattig.rocks/public/cmanager-k8s:0.2.1
+
 certificateIssuer: git-workshop-issuer
 
 externalDomain: workshop.pattig.rocks
