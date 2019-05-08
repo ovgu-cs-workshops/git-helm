@@ -29,8 +29,12 @@ spec:
       - name: {{ $Chart.Name }}-cmanager
         image: {{ $Values.cmanager.containerImage }}
         env:
+        - name: POD_NAMESPACE
+          value: {{ .Release.Namespace }}
+        - name: POD_STORAGE_CLASS
+          value: "ceph-ssd"
         - name: USER_IMAGE
-          value: ovgucsworkshops/git-userland:v0.1.13
+          value: docker.pattig.rocks/public/userland-k8s:0.2.1
         - name: SERVICE_REALM
           value: gittalk
         - name: SERVICE_BROKER_URL
