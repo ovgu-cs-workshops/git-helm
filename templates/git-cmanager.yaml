@@ -32,10 +32,10 @@ spec:
         - name: POD_NAMESPACE
           value: {{ .Release.Namespace }}
         - name: POD_STORAGE_CLASS
-          value: "ceph-ssd"
+          value: {{ $Values.cmanager.storageClass }}
         - name: USER_IMAGE
-          value: docker.pattig.rocks/public/userland-k8s:0.2.1
+          value: {{ $Values.cmanager.userlandImage }}
         - name: SERVICE_REALM
           value: gittalk
         - name: SERVICE_BROKER_URL
-          value: wss://api.workshop.pattig.rocks
+          value: ws://{{ $Release.Name }}-broker

@@ -1,13 +1,18 @@
 
-broker: 
+broker:
   wsPort: 6032
   containerImage: embeddedenterprises/autobahnkreuz:v0.9.8
 
 cmanager:
-  containerImage: docker.pattig.rocks/public/cmanager-k8s:0.2.5
+  containerImage: ovgucsworkshops/cmanager:v0.2.0
+  userlandImage: ovgucsworkshops/git-userland:v0.2.0
+  storageClass: ceph-ssd
 
 webterminal:
   containerImage: ovgucsworkshops/web-terminal:latest
+
+presentation:
+  containerImage: ovgucsworkshops/git-workshop:latest
 
 certificateIssuer: git-workshop-issuer
 
