@@ -25,6 +25,8 @@ spec:
         app.kubernetes.io/instance: {{ $Release.Name }}-cmanager
     spec:
       serviceAccountName: {{ $Release.Name }}-cmanager
+      nodeSelector:
+        {{ $Values.nodeSelector }}
       containers:
       - name: {{ $Chart.Name }}-cmanager
         image: {{ $Values.cmanager.containerImage }}

@@ -24,6 +24,8 @@ spec:
         app.kubernetes.io/name: {{ $Chart.Name }}-presentation
         app.kubernetes.io/instance: {{ $Release.Name }}-presentation
     spec:
+      nodeSelector:
+        {{ $Values.nodeSelector }}
       containers:
       - name: {{ $Chart.Name }}-presentation
         image: {{ $Values.presentation.containerImage }}

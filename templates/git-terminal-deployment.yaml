@@ -24,10 +24,12 @@ spec:
         app.kubernetes.io/name: {{ $Chart.Name }}-terminal
         app.kubernetes.io/instance: {{ $Release.Name }}-terminal
     spec:
+      nodeSelector:
+        {{ $Values.nodeSelector }}
       containers:
       - name: {{ $Chart.Name }}-terminal
         image: {{ $Values.webterminal.containerImage }}
-        env: 
+        env:
         - name: "BROKER_URL"
           value: "wss://api.workshop.pattig.rocks"
         ports:
