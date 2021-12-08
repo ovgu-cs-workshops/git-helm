@@ -1,11 +1,41 @@
-apiVersion: certmanager.k8s.io/v1alpha1
+# Certificate Issuer and Certificate, powered by Letsencrypt & Cert-manager
+{{ if .Values.issuer.enabled }}
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
-  name: {{ .Values.certificateIssuer }}
+  name: {{ .Values.issuer.name }}
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: info@embedded.enterprises
+    email: {{ .Values.issuer.email }}
     privateKeySecretRef:
-      name: tls-{{ .Release.Name }}-{{ .Values.certificateIssuer }}-pkey
-    http01: {}
+      name: tls-{{ .Release.Name }}-{{ .Values.issuer.name }}-pkey
+    solvers:
+    - http01:
+        ingress: {}
+{{ end }}
+---
+{{ if .Values.cert.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  secretName: tls-{{ .Release.Name }}-{{ .Values.issuer.name }}-dkey
+  dnsNames:
+{{ if .Values.cert.domains }}
+{{ range .Values.cert.domains }}
+    - {{ . }}
+{{ end }}
+{{ else }}
+    - {{ .Values.externalDomain }}
+    - api.{{ .Values.externalDomain }}
+    - presentation.{{ .Values.externalDomain }}
+{{ end }}
+  issuerRef:
+    name: {{ .Values.issuer.name }}
+    # We can reference ClusterIssuers by changing the kind here.
+    # The default value is Issuer (i.e. a locally namespaced Issuer)
+    kind: Issuer
+    group: cert-manager.io
+{{ end }}

@@ -1,20 +1,38 @@
-nodeSelector: "git-workshop: prefer"
+config:
+  endpoint: "wss://t-git-ws-api.remote-lab.rocks"
+  realm: "gittalk"
+  interactionLink: "https://t-git-ws.remote-lab.rocks"
 
 broker:
   wsPort: 6032
   containerImage: embeddedenterprises/autobahnkreuz:v0.9.8
 
 cmanager:
-  containerImage: ovgucsworkshops/cmanager:v0.4.0
-  userlandImage: ovgucsworkshops/git-userland:v0.2.1
-  storageClass: ceph-ssd
+  containerImage: ovgucsworkshops/cmanager:v0.5.0
+  userlandImage: ovgucsworkshops/git-userland:v0.3.0
+  storageClass: local-path
 
 webterminal:
-  containerImage: ovgucsworkshops/web-terminal:latest
+  containerImage: ovgucsworkshops/web-terminal:v0.1.1
 
 presentation:
-  containerImage: ovgucsworkshops/git-workshop:latest
+  # TODO: use new image
+  containerImage: ovgucsworkshops/git-workshop:v0.1.0
 
-certificateIssuer: git-workshop-issuer
+cert:
+  enabled: true
+  domains:
+  - t-git-ws.remote-lab.rocks
+  - t-git-ws-api.remote-lab.rocks
+  - t-git-ws-presentation.remote-lab.rocks
 
-externalDomain: workshop.pattig.rocks
+# externalDomain: git-ws.remote-lab.rocks
+
+ingress:
+  enabled: false
+
+issuer:
+  enabled: true
+  name: issuer
+  email: git-ws@deinstapel.de
+

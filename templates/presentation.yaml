@@ -1,0 +1,61 @@
+# This file contains the manifests to deploy the presentation for the workshop
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ .Release.Name }}-presentation
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-presentation
+    helm.sh/chart: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}-presentation
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Chart.Name }}-presentation
+      app.kubernetes.io/instance: {{ .Release.Name }}-presentation
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Chart.Name }}-presentation
+        app.kubernetes.io/instance: {{ .Release.Name }}-presentation
+    spec:
+      {{ if .Values.nodeSelector }}
+      nodeSelector:
+        {{ .Values.nodeSelector }}
+      {{ end }}
+      containers:
+      - name: presentation
+        image: {{ .Values.presentation.containerImage }}
+        volumeMounts:
+        - name: config
+          mountPath: /usr/share/nginx/html/config.json
+          subPath: config.json
+        ports:
+        - containerPort: 80
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Release.Name }}-appconfig
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Release.Name }}-presentation
+  labels:
+    app.kubernetes.io/name: {{ .Chart.Name }}-presentation
+    helm.sh/chart: {{ .Chart.Name }}
+    app.kubernetes.io/instance: {{ .Release.Name }}-presentation
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: {{ .Chart.Name }}-presentation
+    app.kubernetes.io/instance: {{ .Release.Name }}-presentation
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+

@@ -1,0 +1,68 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: https
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - match: Host(`t-git-ws.remote-lab.rocks`)
+    kind: Rule
+    services:
+    - name: workshop-terminal
+      port: 80
+  - match: Host(`t-git-ws-api.remote-lab.rocks`)
+    kind: Rule
+    services:
+    - name: workshop-broker
+      port: 80
+  - match: Host(`t-git-ws-presentation.remote-lab.rocks`)
+    kind: Rule
+    services:
+    - name: workshop-presentation
+      port: 80
+  tls:
+    secretName: tls-workshop-issuer-dkey
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: http
+spec:
+  entryPoints:
+  - web
+  routes:
+  - match: Host(`t-git-ws.remote-lab.rocks`)
+    kind: Rule
+    middlewares:
+    - name: git-hsts
+    services:
+    - name: workshop-terminal
+      port: 80
+  - match: Host(`t-git-ws-api.remote-lab.rocks`)
+    kind: Rule
+    middlewares:
+    - name: git-hsts
+    services:
+    - name: workshop-broker
+      port: 80
+  - match: Host(`t-git-ws-presentation.remote-lab.rocks`)
+    kind: Rule
+    middlewares:
+    - name: git-hsts
+    services:
+    - name: workshop-presentation
+      port: 80
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: git-hsts
+spec:
+  redirectScheme:
+    scheme: https
+
+---
