@@ -16,7 +16,6 @@ webterminal:
   containerImage: ovgucsworkshops/web-terminal:v0.1.1
 
 presentation:
-  # TODO: use new image
   containerImage: ovgucsworkshops/git-workshop:v0.1.0
 
 cert:
