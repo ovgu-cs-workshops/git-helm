@@ -48,6 +48,8 @@ metadata:
 
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ .Chart.Name }}-cmanager
@@ -75,3 +77,5 @@ spec:
           value: {{ .Values.config.realm }}
         - name: SERVICE_BROKER_URL
           value: ws://{{ .Release.Name }}-broker
+        - name: RUNPRIVILEGED
+          value: {{ .Values.cmanager.spawnPrivileged | default "false" | quote }}
